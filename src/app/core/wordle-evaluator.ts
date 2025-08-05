@@ -7,6 +7,9 @@ export class WordleEvaluator {
    * 'B' - letter not in answer
    */
   static evaluateAttempt(input: string, answer: string): string {
+    input = input.toUpperCase();
+    answer = answer.toUpperCase();
+    
     const result: string[] = Array(input.length).fill('B');
     const answerUsed = Array(answer.length).fill(false);
 
