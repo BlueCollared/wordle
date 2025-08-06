@@ -5,7 +5,8 @@ import { GuessResult } from '../core/wordle-types';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-wordle-component',
+  standalone: true,
+  selector: 'wordle-component',
   imports: [FormsModule],
   templateUrl: './wordle-component.html',
   styleUrl: './wordle-component.scss'
