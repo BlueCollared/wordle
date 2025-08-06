@@ -1,0 +1,31 @@
+<div class="wordle-container">
+<form (submit)="submitGuess(); $event.preventDefault()">
+  @for (attempt of attempts; track attempt; let i = $index) {
+    <div>
+      <input
+        type="text"
+        maxlength="5"
+        [disabled]="$index !== this.game.cntAttempts()"
+        [ngModel]="game.attempts()[i]"
+        name="guess{{ i }}"
+        autocomplete="off"
+        autofocus
+      />
+      @if (attempt) {
+        <span>{{ attempt }}</span>
+      }
+    </div>
+  }
+
+  <button type="submit" [disabled]="game.gameOver()">Submit</button>
+</form>
+
+@if (guessFeedback) {
+  <p style="color: red;">{{ guessFeedback }}</p>
+}
+
+@if (game.gameOver() && !guessFeedback) {
+  <p>Game Over!</p>
+}
+</div>
+

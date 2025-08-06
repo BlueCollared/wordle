@@ -1,26 +1,25 @@
-// wordle-game.ts
-
+import { computed, signal } from '@angular/core';
 import { WordleEvaluator } from './wordle-evaluator';
 import { GuessResult, RejectedGuess } from './wordle-types';
 
 export class WordleGame {
+  
   private readonly answer: string;
   private readonly maxAttempts: number;
 
-  private _cntAttempts = 0;
-  
+  private _cntAttempts = signal(0);
+  cntAttempts = this._cntAttempts.asReadonly();
+  gameOver = computed(() => this._cntAttempts() >= this.maxAttempts || this._attempts().includes(this.answer));
+  private _attempts = signal<string[]>([]);
+  public attempts = this._attempts.asReadonly(); 
 
   constructor(answer: string, maxAttempts: number) {
     this.answer = answer;
     this.maxAttempts = maxAttempts;
-  }
-
-  get cntAttempts(): number {
-    return this._cntAttempts;
-  }
-
+  }  
+  
   makeGuess(input: string): GuessResult {
-    if (this._cntAttempts >= this.maxAttempts)
+    if (this.gameOver())
         return {reason: `Past max attempts`};
 
     if (input.length !== this.answer.length) {
@@ -28,10 +27,13 @@ export class WordleGame {
         //kind: 'Rejected',
         reason: `Expected word of length ${this.answer.length}, got ${input.length}`
       };
+
       return rejection;
     }
 
-    this._cntAttempts++;
+    this._cntAttempts.update(x => x + 1);
+    this._attempts.update(attempts => [...attempts, input]);
+
     return WordleEvaluator.evaluateAttempt(input.toUpperCase(), this.answer);
   }
 }
