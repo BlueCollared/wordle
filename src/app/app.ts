@@ -3,7 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { WordleComponent } from "./wordle-component/wordle-component";
 
 @Component({
-  selector: 'app-root',
+  standalone: true,
+  selector: 'app-root',  
   imports: [RouterOutlet, WordleComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
